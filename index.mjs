@@ -12,18 +12,34 @@ async function findMarkdownFiles(dir) {
   });
 }
 
+async function findTags(file) {
+  const re = new RegExp('#[A-Za-z0-9\-]*');
+  let filehandle;
+  try {
+    filehandle = await open(file, 'r');
+    let tags = filehandle.readlines().filter(function extractTag(line) {
+      console.log(line)
+      return re.match(line)
+    })
+    console.log(tags)
+    return tags
+  } finally {
+    await filehandle?.close();
+  }
+}
+
 async function run() {
   try {
     const cwd = path.resolve();
     if (core.getInput('dirpath') == null) {
       // default to the current working directory
-      const dirpath = cwd;
-      const markdownFiles = await findMarkdownFiles(dirpath);
-      console.log(markdownFiles)
+      let dirpath = cwd;
+      let markdownFiles = await findMarkdownFiles(dirpath);
+      // TODO
     } else {
-      const dirpath = path.join(cwd, core.getInput('dirpath'));
-      const markdownFiles = await findMarkdownFiles(dirpath);
-      console.log(markdownFiles)
+      let dirpath = path.join(cwd, core.getInput('dirpath'));
+      let markdownFiles = await findMarkdownFiles(dirpath);
+      let tags = markdownFiles.map(findTags)
     }
   } catch (err) {
     console.error(err);
