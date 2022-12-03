@@ -1,13 +1,9 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'ObsidianMD-tags-to-readme'
+description: 'Creates a README index of tags from ObsidianMD files'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  dirpath: 
+    description: 'path to directory containing ObsidianMD files'
     required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
 runs:
   using: 'node16'
-  main: 'dist/index.js'
+  main: 'index.js'
