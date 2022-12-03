@@ -3,19 +3,17 @@ import { readdir } from 'node:fs/promises';
 import * as path from 'path';
 
 
-async function logFiles(dirpath) {
-  const markdownFiles = await readdir(dirpath);
-    markdownFiles.map(function log(file) {
-      if ( path.extname(file) === ".md" ) {
-        console.log(file);
-      }
-    });
+async function findMarkdownFiles(dirpath) {
+  const files = await readdir(dirpath);
+  return files.filter(function isMarkdown(file) {
+    return path.extname(file) === ".md"
+  });
 }
 
 async function run() {
   try {
     const cwd = path.resolve();
-    logFiles(cwd);
+    const markdownFiles = await findMarkdownFiles(cwd);
   } catch (err) {
     console.error(err);
   }
